@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <!-- 藍色圓角底 -->
+    <path android:fillColor="#0B5FA5"
+        android:pathData="M18,0 H78 A18,18 0 0 1 96,18 V78 A18,18 0 0 1 78,96 H18 A18,18 0 0 1 0,78 V18 A18,18 0 0 1 18,0 Z" />
+    <!-- 左頁 -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M18,26 L46,30 L46,74 L18,70 Z" />
+    <!-- 右頁 -->
+    <path android:fillColor="#FFF1D6"
+        android:pathData="M78,26 L50,30 L50,74 L78,70 Z" />
+    <!-- 書頁上的字行 -->
+    <path android:fillColor="#0B5FA5"
+        android:pathData="M24,38 L40,40 L40,44 L24,42 Z M24,48 L40,50 L40,54 L24,52 Z M24,58 L40,60 L40,64 L24,62 Z" />
+    <path android:fillColor="#B3261E"
+        android:pathData="M56,40 L72,38 L72,42 L56,44 Z" />
+</vector>

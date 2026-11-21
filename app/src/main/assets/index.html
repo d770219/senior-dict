@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>大字國語辭典</title>
+<style>
+:root{
+  --bg:#FFFDF7; --card:#FFFFFF; --text:#1B1B1B; --sub:#4A4A4A; --line:#D9D2C3;
+  --accent:#0B5FA5; --accent-d:#084A82; --warn:#B3261E; --star:#C77700;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:26px} /* 預設：中等偏大；由字體按鈕改變 */
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.6;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+.top{position:sticky;top:0;z-index:5;background:var(--accent);color:#fff;font-size:16px;
+  display:flex;align-items:center;gap:6px;padding:6px 10px}
+.top h1{font-size:19px;margin:0;flex:1;font-weight:700;white-space:nowrap}
+.fbtn{background:#fff;color:var(--accent-d);border:0;border-radius:10px;
+  min-width:48px;height:48px;font-weight:800;font-size:20px}
+.fbtn:active{background:#dbe8f5}
+.flabel{font-size:13px;opacity:.95;min-width:44px;text-align:center;line-height:1.15}
+#q::-webkit-search-cancel-button,#q::-webkit-search-decoration{-webkit-appearance:none;display:none}
+main{padding:.7rem .7rem 3rem;max-width:46rem;margin:0 auto}
+.sbox{display:flex;gap:.4rem;margin:.2rem 0 .6rem}
+.sbox .wrap{position:relative;flex:1}
+#q{width:100%;height:3.1rem;font:inherit;font-size:1.05rem;padding:0 2.6rem 0 .8rem;
+  border:3px solid var(--accent);border-radius:.7rem;background:#fff;color:var(--text)}
+#q:focus{outline:none;border-color:var(--accent-d);box-shadow:0 0 0 3px #9cc2e6}
+#clr{position:absolute;right:.2rem;top:.3rem;width:2.5rem;height:2.5rem;border:0;background:transparent;
+  font-size:1.1rem;color:var(--sub);display:none}
+#go{height:3.1rem;padding:0 1rem;border:0;border-radius:.7rem;background:var(--accent);color:#fff;font-weight:800;font-size:1rem}
+#go:active{background:var(--accent-d)}
+.hint{color:var(--sub);font-size:.72rem;margin:.1rem 0 .6rem}
+.sec{display:flex;align-items:center;justify-content:space-between;margin:1rem 0 .3rem}
+.sec h2{font-size:.95rem;margin:0}
+.link{background:none;border:0;color:var(--accent-d);font-size:.72rem;text-decoration:underline;padding:.3rem}
+.row{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%;text-align:left;
+  background:var(--card);border:2px solid var(--line);border-radius:.7rem;padding:.55rem .8rem;margin:.4rem 0;min-height:3.2rem}
+.row:active{background:#eaf2fa;border-color:var(--accent)}
+.row .t{font-size:1.05rem;font-weight:700;word-break:break-all}
+.row .b{font-size:.7rem;color:var(--accent-d);white-space:nowrap}
+.empty{color:var(--sub);padding:.6rem .2rem;font-size:.8rem}
+.more{display:block;width:100%;margin:.6rem 0;height:3rem;border:2px solid var(--accent);background:#fff;color:var(--accent-d);
+  border-radius:.7rem;font-weight:800;font-size:.85rem}
+/* 詳細頁 */
+.nav{display:flex;gap:.5rem;margin:.1rem 0 .7rem}
+.nbtn{flex:1;height:3rem;border-radius:.7rem;border:2px solid var(--accent);background:#fff;color:var(--accent-d);font-weight:800;font-size:.85rem}
+.nbtn:active{background:#dbe8f5}
+.nbtn.on{background:#FFF1D6;border-color:var(--star);color:#7A4A00}
+.word{font-size:2.4rem;font-weight:800;line-height:1.25;margin:.2rem 0;word-break:break-all}
+.het{background:var(--card);border:2px solid var(--line);border-radius:.9rem;padding:.7rem .8rem;margin:.7rem 0}
+.zy{font-size:1.15rem;color:var(--accent-d);font-weight:700}
+.py{font-size:.75rem;color:var(--sub);margin-left:.4rem}
+.say{display:inline-flex;align-items:center;gap:.3rem;height:2.7rem;padding:0 .8rem;border-radius:.7rem;border:0;
+  background:var(--accent);color:#fff;font-weight:800;font-size:.8rem;margin:.3rem .4rem .3rem 0}
+.say:active{background:var(--accent-d)}
+.say.sm{height:2.3rem;font-size:.7rem;background:#fff;color:var(--accent-d);border:2px solid var(--accent)}
+.def{border-top:1px dashed var(--line);padding:.6rem 0 .3rem}
+.def:first-of-type{border-top:0}
+.num{display:inline-block;min-width:1.5rem;font-weight:800;color:var(--accent-d)}
+.tag{display:inline-block;font-size:.62rem;background:#E3EEF9;color:var(--accent-d);border-radius:.4rem;padding:0 .4rem;margin-right:.35rem;font-weight:700}
+.dtext{font-size:1rem}
+.ex{margin:.35rem 0 0 1.5rem;color:var(--sub);font-size:.85rem}
+.rel{margin:.4rem 0 0 1.5rem;font-size:.8rem}
+.chip{display:inline-block;border:2px solid var(--accent);color:var(--accent-d);background:#fff;border-radius:.6rem;
+  padding:.05rem .55rem;margin:.2rem .3rem .2rem 0;font-size:.8rem;font-weight:700}
+.chip:active{background:#dbe8f5}
+.about{font-size:.68rem;color:var(--sub);margin-top:2rem;border-top:1px solid var(--line);padding-top:.7rem}
+.toast{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);background:#222;color:#fff;
+  padding:.5rem 1rem;border-radius:.7rem;font-size:.8rem;display:none;z-index:9}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>大字國語辭典</h1>
+  <button class="fbtn" id="fdn" aria-label="字體縮小">A-</button>
+  <span class="flabel" id="flab">字體<br>中大</span>
+  <button class="fbtn" id="fup" aria-label="字體放大">A+</button>
+</div>
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+var NS = 400;
+var LEVELS = [
+  {px:20, name:"小"},
+  {px:23, name:"中"},
+  {px:26, name:"中大"},   // 預設
+  {px:30, name:"大"},
+  {px:35, name:"特大"},
+  {px:40, name:"超大"}
+];
+var TYPE = {"名":"名詞","動":"動詞","形":"形容詞","副":"副詞","連":"連接詞","介":"介系詞","助":"助詞","嘆":"感嘆詞","代":"代名詞","量":"量詞","數":"數詞","疊":"疊字","狀":"狀聲詞","詞":"詞","接":"接頭／接尾詞"};
+
+var T = [], B = [], loaded = false, shardCache = {};
+var app = document.getElementById("app");
+
+/* ---------- 小工具 ---------- */
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function store(k,v){try{ if(v===undefined){var r=localStorage.getItem(k);return r?JSON.parse(r):null} localStorage.setItem(k,JSON.stringify(v)) }catch(e){return null}}
+function toast(msg){var t=$("toast");t.textContent=msg;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(function(){t.style.display="none"},1800)}
+
+/* ---------- 字體大小 ---------- */
+var lv = store("lv"); if(typeof lv!=="number"||lv<0||lv>=LEVELS.length) lv = 2;
+function applyLv(){
+  document.documentElement.style.fontSize = LEVELS[lv].px+"px";
+  $("flab").innerHTML = "字體<br>"+LEVELS[lv].name;
+  $("fdn").style.opacity = lv===0?.4:1; $("fup").style.opacity = lv===LEVELS.length-1?.4:1;
+  store("lv",lv);
+}
+$("fdn").onclick=function(){ if(lv>0){lv--;applyLv()} else toast("已經是最小字體"); };
+$("fup").onclick=function(){ if(lv<LEVELS.length-1){lv++;applyLv()} else toast("已經是最大字體"); };
+applyLv();
+
+/* ---------- 朗讀 ---------- */
+function speak(text){
+  text = String(text||"").replace(/[「」『』]/g,"");
+  try{
+    if(window.AndroidTTS){ window.AndroidTTS.speak(text); return; }
+    if(window.speechSynthesis){
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang="zh-TW"; u.rate=0.85; speechSynthesis.speak(u); return;
+    }
+  }catch(e){}
+  toast("這支手機沒有朗讀功能");
+}
+
+/* ---------- 資料 ---------- */
+function loadTitles(){
+  if(loaded) return Promise.resolve();
+  return fetch("data/titles.txt").then(function(r){return r.text()}).then(function(txt){
+    var lines = txt.split("\n");
+    for(var i=0;i<lines.length;i++){
+      var p = lines[i].indexOf("\t");
+      if(p<0){T.push(lines[i]);B.push("")}
+      else{T.push(lines[i].slice(0,p));B.push(lines[i].slice(p+1))}
+    }
+    loaded = true;
+  });
+}
+function getShard(ch){
+  var id = ch.codePointAt(0)%NS;
+  if(shardCache[id]) return Promise.resolve(shardCache[id]);
+  return fetch("data/s"+id+".json").then(function(r){return r.json()}).then(function(j){shardCache[id]=j;return j});
+}
+function getEntry(title){
+  return getShard(Array.from(title)[0]).then(function(s){return s[title]||null});
+}
+
+/* ---------- 搜尋 ---------- */
+var ZY_RE = /^[ㄅ-ㄯˉˊˇˋ˙\s]+$/;
+function stripTone(s){return s.replace(/[ˉˊˇˋ˙\s]/g,"")}
+function search(q){
+  q = q.trim(); var out=[];
+  if(!q) return out;
+  if(ZY_RE.test(q)){                       // 用注音查
+    var qq = stripTone(q);
+    var qn = q.replace(/\s/g,""), exact=[], rest=[];
+    for(var i=0;i<T.length;i++){
+      if(!B[i]) continue;
+      var bn = B[i].replace(/\s/g,"");
+      if(bn.indexOf(qn)===0) exact.push(i);
+      else if(rest.length<300 && stripTone(B[i]).indexOf(qq)===0) rest.push(i);
+    }
+    var byLen=function(a,b){return T[a].length-T[b].length};
+    exact.sort(byLen); rest.sort(byLen);
+    return exact.slice(0,300).concat(rest);
+  }
+  var exact=-1, pre=[], inc=[];
+  for(var j=0;j<T.length;j++){
+    var t=T[j];
+    if(t===q){exact=j}
+    else if(t.indexOf(q)===0){pre.push(j)}
+    else if(inc.length<200 && t.indexOf(q)>0){inc.push(j)}
+  }
+  pre.sort(function(a,b){return T[a].length-T[b].length});
+  if(exact>=0) out.push(exact);
+  return out.concat(pre.slice(0,200),inc);
+}
+
+/* ---------- 畫面：首頁 ---------- */
+var favs = store("favs")||[], hist = store("hist")||[];
+function rowHTML(t,b){return '<button class="row" data-w="'+esc(t)+'"><span class="t">'+esc(t)+'</span><span class="b">'+esc(b||"")+'</span></button>'}
+function bopoOf(t){var i=T.indexOf(t);return i>=0?B[i]:""}
+
+function homeView(){
+  var h = '<div class="sbox"><div class="wrap"><input id="q" type="search" placeholder="輸入想查的字或詞" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"><button id="clr" aria-label="清除">✕</button></div><button id="go">查詢</button></div>'
+        + '<div class="hint">可以輸入國字，或直接打注音（例如 ㄒㄩㄝˊ）</div><div id="res"></div><div id="home">';
+  h += '<div class="sec"><h2>⭐ 我的最愛</h2></div>';
+  h += favs.length ? favs.map(function(t){return rowHTML(t,"")}).join("") : '<div class="empty">還沒有。查到喜歡的字詞，按「加入最愛」就會放在這裡。</div>';
+  h += '<div class="sec"><h2>🕘 最近查過</h2>'+(hist.length?'<button class="link" id="clrhist">清除紀錄</button>':'')+'</div>';
+  h += hist.length ? hist.map(function(t){return rowHTML(t,"")}).join("") : '<div class="empty">還沒有查過任何字詞。</div>';
+  h += '</div><div class="about">資料來源：中華民國教育部《重編國語辭典修訂本》，採「創用CC 姓名標示－禁止改作 臺灣3.0版」授權。本程式只做查詢與顯示，不修改辭典文字。<br>不用網路也可以使用。<br>程式版本：1.0</div>';
+  app.innerHTML = h;
+
+  var q=$("q"), res=$("res"), home=$("home"), clr=$("clr"), shown=0, list=[];
+  function render(more){
+    shown = more ? Math.min(list.length, shown+40) : Math.min(list.length, 40);
+    var html = "";
+    for(var i=0;i<shown;i++) html += rowHTML(T[list[i]],B[list[i]]);
+    if(shown<list.length) html += '<button class="more" id="more">再看更多（還有 '+(list.length-shown)+' 筆）</button>';
+    res.innerHTML = html;
+    var m=$("more"); if(m) m.onclick=function(){render(true)};
+  }
+  function run(){
+    var v=q.value; clr.style.display = v?"block":"none";
+    if(!v.trim()){res.innerHTML="";res.dataset.keep="";home.style.display="";return}
+    home.style.display="none";
+    loadTitles().then(function(){
+      if(q.value!==v) return;
+      list=search(v);
+      if(!list.length){res.dataset.keep="";res.innerHTML='<div class="empty">找不到「'+esc(v)+'」。<br>請檢查有沒有打錯字，或換一個說法試試。</div>';return}
+      res.dataset.keep=""; render(false);
+    });
+  }
+  var timer; q.oninput=function(){clearTimeout(timer);timer=setTimeout(run,150)};
+  clr.onclick=function(){q.value="";run();q.focus()};
+  function goQuery(){
+    var v=q.value.trim(); if(!v) {toast("請先輸入想查的字");return}
+    loadTitles().then(function(){
+      var l=search(v); if(!l.length){run();return}
+      if(T[l[0]]===v || l.length===1){ openWord(T[l[0]]) } else { run(); }
+      q.blur();
+    });
+  }
+  $("go").onclick=goQuery;
+  q.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();goQuery()}};
+  app.onclick=function(e){
+    var r=e.target.closest("[data-w]"); if(r){openWord(r.getAttribute("data-w"));return}
+    if(e.target.id==="clrhist"){hist=[];store("hist",hist);homeView()}
+  };
+  if(q.value) run();
+}
+
+/* ---------- 畫面：詳細 ---------- */
+function openWord(t){ location.hash = "#/w/"+encodeURIComponent(t); }
+
+function wordView(title){
+  app.innerHTML = '<div class="empty">查詢中…</div>';
+  getEntry(title).then(function(hs){
+    var isFav = favs.indexOf(title)>=0;
+    var h = '<div class="nav"><button class="nbtn" id="back">← 回上一頁</button><button class="nbtn'+(isFav?' on':'')+'" id="fav">'+(isFav?'★ 已加入最愛':'☆ 加入最愛')+'</button></div>';
+    h += '<div class="word">'+esc(title)+'</div>';
+    if(!hs){
+      h += '<div class="empty">辭典裡沒有「'+esc(title)+'」。</div>';
+    }else{
+      h += '<button class="say" id="sayw">🔊 唸出來</button>';
+      hs.forEach(function(x,hi){
+        h += '<div class="het">';
+        if(x.b){ h += '<div><span class="zy">'+esc(x.b)+'</span>'+(x.p?'<span class="py">'+esc(x.p)+'</span>':'')+'</div>'; }
+        if(hs.length>1){ h += '<div class="py" style="margin:0">第 '+(hi+1)+' 種唸法（共 '+hs.length+' 種）</div>'; }
+        x.d.forEach(function(d,di){
+          h += '<div class="def"><div class="dtext"><span class="num">'+(di+1)+'.</span>';
+          if(d.t) h += '<span class="tag">'+esc(TYPE[d.t]||d.t)+'</span>';
+          h += esc(d.f)+'</div>';
+          if(d.e) h += '<div class="ex">'+d.e.map(esc).join("<br>")+'</div>';
+          if(d.s) h += '<div class="rel">意思相近：'+chips(d.s)+'</div>';
+          if(d.a) h += '<div class="rel">意思相反：'+chips(d.a)+'</div>';
+          h += '<button class="say sm" data-say="'+hi+'-'+di+'">🔊 唸這段解釋</button></div>';
+        });
+        h += '</div>';
+      });
+    }
+    app.innerHTML = h;
+    window.scrollTo(0,0);
+    $("back").onclick=function(){ if(history.length>1) history.back(); else location.hash="#/"; };
+    $("fav").onclick=function(){
+      var i=favs.indexOf(title);
+      if(i>=0){favs.splice(i,1);toast("已從最愛移除")} else {favs.unshift(title);toast("已加入最愛")}
+      store("favs",favs); wordView(title);
+    };
+    if(hs){
+      $("sayw").onclick=function(){
+        var x=hs[0]; speak(title);
+      };
+      app.onclick=function(e){
+        var s=e.target.closest("[data-say]");
+        if(s){
+          var p=s.getAttribute("data-say").split("-"); var d=hs[+p[0]].d[+p[1]];
+          speak(title+"。"+d.f+(d.e?"。"+d.e.join("。"):"")); return;
+        }
+        var c=e.target.closest("[data-w]"); if(c) openWord(c.getAttribute("data-w"));
+      };
+    }
+    // 紀錄
+    hist = [title].concat(hist.filter(function(w){return w!==title})).slice(0,30); store("hist",hist);
+  });
+}
+function chips(s){
+  var arr = Array.isArray(s)?s:String(s).split(/[,、，]/);
+  return arr.map(function(w){w=String(w).trim();return w?'<button class="chip" data-w="'+esc(w)+'">'+esc(w)+'</button>':''}).join("");
+}
+
+/* ---------- 路由 ---------- */
+function route(){
+  var h = location.hash||"#/";
+  var m = h.match(/^#\/w\/(.+)$/);
+  if(m){ wordView(decodeURIComponent(m[1])); }
+  else{ homeView(); }
+}
+window.addEventListener("hashchange",route);
+route();
+loadTitles(); // 先在背景載入，之後搜尋就很快
+</script>
+</body>
+</html>
